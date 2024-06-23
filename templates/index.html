@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='code.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename='script.js') }}" type="module"></script>
+</head>
+<body>
+    <h1>Stock Analysis</h1>
+    
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <form method="POST" action="/get_plot">
+        <label for="stock_name">Select Stock Ticker Symbol:</label>
+        <select name="stock_name" class="stock_name" id="stock_name"></select>
+        <label for="stock_start_date">Select Stock Start Date:</label>
+        <input type="date" id="stock_start_date" name="stock_start_date" required>
+        <label for="stock_end_date">Select Stock End Date:</label>
+        <input type="date" id="stock_end_date" name="stock_end_date" class="stock_end_date" required>
+        <label for="interval">Select Interval:</label>
+        <select name="interval" class="interval" id="interval">
+            <option value="1m">1 Minute</option>
+            <option value="2m">2 Minutes</option>
+            <option value="5m">5 Minutes</option>
+            <option value="15m">15 Minutes</option>
+            <option value="30m">30 Minutes</option>
+            <option value="1h">1 Hour</option>
+            <option value="1d">1 Day</option>
+            <option value="1wk">1 Week</option>
+            <option value="1mo">1 Month</option>
+            <option value="3mo">3 Months</option>
+        </select>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if plot_url %}
+        <img src="{{ plot_url }}" alt="Chart">
+    {% endif %}
+</body>
+</html>
